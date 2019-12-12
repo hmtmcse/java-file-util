@@ -1,0 +1,85 @@
+
+group 'com.hmtmcse.fileutil'
+version '1.0.0'
+
+
+repositories {
+    mavenCentral()
+}
+
+
+
+def dependencyList = []
+
+
+dependencies {
+    dependencyList.each {
+        if (findProject(":" + it)){
+            compile project(":" + it)
+        }
+    }
+}
+
+Boolean isPublish = false
+if (isPublish) {
+    bintray {
+
+        user = (project.hasProperty('bintrayUser') ? project.property('bintrayUser') : "hmtmcse" )
+        key =  (project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : "123" )
+        publish = true
+        override = true
+        publications = ['mavenJava']
+        pkg {
+            repo = 'maven'
+            name = 'com.hmtmcse.fileutil'
+            vcsUrl = 'https://github.com/hmtmcse/fileutil-file-util.git'
+            licenses = ['Apache-2.0']
+        }
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = 'fileutil-file-util'
+                groupId = 'com.hmtmcse.fileutil'
+                from components.java
+                artifact sourcesJar
+                versionMapping {
+                    usage('fileutil-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('fileutil-runtime') {
+                        fromResolutionResult()
+                    }
+                }
+                pom {
+                    name = 'Java File Util'
+                    description = 'This is fileutil-file-util library'
+                    url = 'http://www.hmtmcse.com/app-and-lib/fileutil/fileutil-file-util'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'hmtmcse'
+                            name = 'H.M Touhid Mia'
+                            email = 'hmtm.cse@gmail.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:https://github.com/hmtmcse/fileutil-file-util.git'
+                        developerConnection = 'scm:git:https://github.com/hmtmcse/fileutil-file-util.git'
+                        url = 'https://github.com/hmtmcse/fileutil-file-util'
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}
