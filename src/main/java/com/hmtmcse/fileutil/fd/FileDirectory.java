@@ -88,15 +88,40 @@ public class FileDirectory {
         return Files.exists(sourceFile);
     }
 
+    private Boolean copyAll(Path src, Path dest) throws FileUtilException {
+        try {
+            Files.walk(src).forEach(source -> {
+                try {
+                    copyData(source, dest.resolve(src.relativize(source)));
+                } catch (FileUtilException e) {
+                    System.err.println(e.getMessage());
+                }
+            });
+        } catch (IOException e) {
+            throw new FileUtilException(e.getMessage());
+        }
+        return true;
+    }
+
+
+    public Boolean copyAll(String source, String destination) throws FileUtilException {
+        return copyAll(Paths.get(source), Paths.get(destination));
+    }
+
+
+    private void copyData(Path source, Path destination) throws FileUtilException {
+        try {
+            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            throw new FileUtilException(e.getMessage());
+        }
+    }
+
     public Boolean copy(String source, String destination) throws FileUtilException {
         Path sourceFile = Paths.get(source);
         Path targetFile = Paths.get(destination);
-        try {
-            Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
-            return true;
-        } catch (IOException ex) {
-            throw new FileUtilException(ex.getMessage());
-        }
+        copyData(sourceFile, targetFile);
+        return true;
     }
 
     public Boolean move(String source, String destination) throws FileUtilException {
