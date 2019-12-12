@@ -11,4 +11,10 @@ class FileDirectoryTest extends Specification{
         fileDirectory.getDetailsInfo("C:\\Users\\touhid\\Desktop\\temp\\Feedback.htm", true)
     }
 
+    def "Delete Test"(){
+        expect: "Will Delete Recursively"
+        FileDirectory fileDirectory = new FileDirectory()
+        fileDirectory.removeAll("C:\\Users\\touhid\\Desktop\\temp\\delete-it")
+    }
+
 }

@@ -2,10 +2,11 @@ package com.hmtmcse.fileutil.fd;
 
 import com.hmtmcse.fileutil.common.FileUtilException;
 import com.hmtmcse.fileutil.data.FDInfo;
-
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
+import java.util.Comparator;
 
 public class FileDirectory {
 
@@ -80,6 +81,78 @@ public class FileDirectory {
             throw new FileUtilException(e.getMessage());
         }
         return fdInfo;
+    }
+
+    public Boolean isExist(String path){
+        Path sourceFile = Paths.get(path);
+        return Files.exists(sourceFile);
+    }
+
+    public Boolean copy(String source, String destination) throws FileUtilException {
+        Path sourceFile = Paths.get(source);
+        Path targetFile = Paths.get(destination);
+        try {
+            Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (IOException ex) {
+            throw new FileUtilException(ex.getMessage());
+        }
+    }
+
+    public Boolean move(String source, String destination) throws FileUtilException {
+        Path sourceFile = Paths.get(source);
+        Path targetFile = Paths.get(destination);
+        try {
+            Files.move(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (IOException ex) {
+            throw new FileUtilException(ex.getMessage());
+        }
+    }
+
+    public Boolean remove(String path) throws FileUtilException {
+        Path sourceFile = Paths.get(path);
+        try {
+            if (isExist(path)){
+                Files.delete(sourceFile);
+            }
+            return true;
+        } catch (IOException ex) {
+            throw new FileUtilException(ex.getMessage());
+        }
+    }
+
+    public Boolean removeAll(String path) throws FileUtilException {
+        Path sourceFile = Paths.get(path);
+        try {
+            if (isExist(path)) {
+                Files.walk(sourceFile).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+            }
+            return true;
+        } catch (IOException ex) {
+            throw new FileUtilException(ex.getMessage());
+        }
+    }
+
+    public Boolean createDirectory(String path) throws FileUtilException {
+        Path sourceFile = Paths.get(path);
+        try {
+            Files.createDirectory(sourceFile);
+            return true;
+        } catch (IOException ex) {
+            throw new FileUtilException(ex.getMessage());
+        }
+    }
+
+
+    public Boolean createDirectories(String path) throws FileUtilException {
+        Path sourceFile = Paths.get(path);
+        try {
+            Files.createDirectories(sourceFile);
+            return true;
+        } catch (IOException ex) {
+            throw new FileUtilException(ex.getMessage());
+        }
     }
 
 
