@@ -151,7 +151,19 @@ public class FileDirectory {
         Path sourceFile = Paths.get(path);
         try {
             if (isExist(path)) {
-                Files.walk(sourceFile).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+                Files.walkFileTree(sourceFile, new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                        Files.delete(file);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                        Files.delete(dir);
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
             }
             return true;
         } catch (IOException ex) {
@@ -180,5 +192,21 @@ public class FileDirectory {
         }
     }
 
+    public Boolean createSymbolicLink(String source, String destination) throws FileUtilException {
+        Path sourceFile = Paths.get(source);
+        Path targetFile = Paths.get(destination);
+        try {
+            Files.createSymbolicLink(sourceFile, targetFile);
+            return true;
+        } catch (IOException ex) {
+            throw new FileUtilException(ex.getMessage());
+        }
+    }
+
+
+    public Boolean isSymbolicLink (String path){
+        Path sourceFile = Paths.get(path);
+        return Files.isSymbolicLink(sourceFile);
+    }
 
 }
