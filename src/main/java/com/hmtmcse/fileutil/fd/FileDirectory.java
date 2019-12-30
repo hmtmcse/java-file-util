@@ -8,6 +8,11 @@ import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.util.Comparator;
 
+import static java.nio.file.FileVisitResult.CONTINUE;
+import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 public class FileDirectory {
 
     public Boolean setOwner(Path path, String ownerName) throws FileUtilException {
@@ -83,18 +88,68 @@ public class FileDirectory {
         return fdInfo;
     }
 
-    public Boolean isExist(String path){
-        Path sourceFile = Paths.get(path);
-        return Files.exists(sourceFile);
+
+    public Boolean isExist(Path path) {
+        return Files.exists(path);
     }
 
-    private Boolean copyAll(Path src, Path dest) throws FileUtilException {
+
+    public Boolean isExist(String path) {
+        Path sourceFile = Paths.get(path);
+        return this.isExist(sourceFile);
+    }
+
+
+    public Boolean copyAll(Path source, Path target, CopyOption... options) throws FileUtilException {
         try {
-            Files.walk(src).forEach(source -> {
-                try {
-                    copyData(source, dest.resolve(src.relativize(source)));
-                } catch (FileUtilException e) {
-                    System.err.println(e.getMessage());
+            Files.walkFileTree(source, new FileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+                    Path newdir = target.resolve(source.relativize(dir));
+                    try {
+                        Files.copy(dir, newdir, COPY_ATTRIBUTES);
+                    } catch (FileAlreadyExistsException x) {
+                        // ignore
+                    } catch (IOException x) {
+                        System.err.format("Unable to create: %s: %s%n", newdir, x);
+                        return SKIP_SUBTREE;
+                    }
+                    return CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    try {
+                        Path newdir = target.resolve(source.relativize(file));
+                        Files.copy(file, newdir, REPLACE_EXISTING);
+                    } catch (IOException x) {
+                        System.err.format("Unable to copy: %s: %s%n", source, x);
+                    }
+                    return CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    if (exc instanceof FileSystemLoopException) {
+                        System.err.println("cycle detected: " + file);
+                    } else {
+                        System.err.format("Unable to copy: %s: %s%n", file, exc);
+                    }
+                    return CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    if (exc == null) {
+                        Path newdir = target.resolve(source.relativize(dir));
+                        try {
+                            FileTime time = Files.getLastModifiedTime(dir);
+                            Files.setLastModifiedTime(newdir, time);
+                        } catch (IOException x) {
+                            System.err.format("Unable to copy all attributes to: %s: %s%n", newdir, x);
+                        }
+                    }
+                    return CONTINUE;
                 }
             });
         } catch (IOException e) {
@@ -109,9 +164,9 @@ public class FileDirectory {
     }
 
 
-    private void copyData(Path source, Path destination) throws FileUtilException {
+    private void copyData(Path source, Path destination, CopyOption... options) throws FileUtilException {
         try {
-            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(source, destination, options);
         } catch (Exception e) {
             throw new FileUtilException(e.getMessage());
         }
