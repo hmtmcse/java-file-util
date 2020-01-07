@@ -22,7 +22,7 @@ class FileDirectoryTest extends Specification{
     def "Copy Test"(){
         expect: "Copy Directory"
         FileDirectory fileDirectory = new FileDirectory()
-        fileDirectory.copyAll("C:\\Users\\touhid\\Desktop\\temp\\copy", "C:\\Users\\touhid\\Desktop\\temp\\habijabi\\copyTo")
+        fileDirectory.copyAll("C:\\Users\\touhid\\Desktop\\temp\\copy", "C:\\Users\\touhid\\Desktop\\temp\\bismillah\\copyTo")
     }
 
 }
