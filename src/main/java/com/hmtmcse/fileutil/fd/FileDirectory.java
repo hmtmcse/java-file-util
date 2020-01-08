@@ -264,4 +264,19 @@ public class FileDirectory {
         return Files.isSymbolicLink(sourceFile);
     }
 
+    private void throwIfNull(String object, String message) throws FileUtilException{
+        if (object == null){
+            throwException(message);
+        }
+    }
+
+    private void throwException(String message) throws FileUtilException {
+        throw new FileUtilException(message);
+    }
+
+    public File getFile(String location) throws FileUtilException {
+        throwIfNull(location, "Path Should not be null");
+        return new File(location);
+    }
+
 }
