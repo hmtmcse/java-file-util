@@ -102,7 +102,7 @@ public class FileDirectory {
     }
 
 
-    public Boolean copyAll(Path source, Path target, JDCopyOption... options) throws FileUtilException {
+    public Boolean copyAll(Path source, Path target, CopyOption... options) throws FileUtilException {
         try {
             Files.walkFileTree(source, new FileVisitor<Path>() {
                 @Override
@@ -160,7 +160,7 @@ public class FileDirectory {
         return true;
     }
 
-    public Boolean copyAll(String source, String destination, JDCopyOption... options) throws FileUtilException {
+    public Boolean copyAll(String source, String destination, CopyOption... options) throws FileUtilException {
         return copyAll(Paths.get(source), Paths.get(destination), options);
     }
 
