@@ -186,7 +186,7 @@ public class FileDirectory {
 
 
     public Boolean move(String source, String destination) throws FileUtilException {
-        return move(source, destination, JDCopyOption.REPLACE_EXISTING);
+        return move(source, destination, StandardCopyOption.REPLACE_EXISTING);
     }
 
     public Boolean move(String source, String destination, CopyOption... options) throws FileUtilException {
