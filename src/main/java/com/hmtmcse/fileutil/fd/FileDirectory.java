@@ -193,9 +193,10 @@ public class FileDirectory {
         Path sourceFile = Paths.get(source);
         Path targetFile = Paths.get(destination);
         try {
-            Files.move(sourceFile, targetFile);
+            System.out.println(Files.move(sourceFile, targetFile).toAbsolutePath());
             return true;
         } catch (IOException ex) {
+            System.out.println("ex: " + ex.getMessage());
             throw new FileUtilException(ex.getMessage());
         }
     }
