@@ -186,14 +186,14 @@ public class FileDirectory {
 
 
     public Boolean move(String source, String destination) throws FileUtilException {
-        return move(source, destination);
+        return move(source, destination, StandardCopyOption.REPLACE_EXISTING);
     }
 
     public Boolean move(String source, String destination, CopyOption... options) throws FileUtilException {
         Path sourceFile = Paths.get(source);
         Path targetFile = Paths.get(destination);
         try {
-            Files.move(sourceFile, targetFile, options);
+            Files.move(sourceFile, targetFile);
             return true;
         } catch (IOException ex) {
             throw new FileUtilException(ex.getMessage());
