@@ -2,6 +2,8 @@ package com.hmtmcse.fileutil.fd;
 
 import com.hmtmcse.fileutil.common.FileUtilException;
 import com.hmtmcse.fileutil.data.FDInfo;
+import com.hmtmcse.fileutil.data.JDCopyOption;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
@@ -100,7 +102,7 @@ public class FileDirectory {
     }
 
 
-    public Boolean copyAll(Path source, Path target, CopyOption... options) throws FileUtilException {
+    public Boolean copyAll(Path source, Path target, JDCopyOption... options) throws FileUtilException {
         try {
             Files.walkFileTree(source, new FileVisitor<Path>() {
                 @Override
@@ -158,9 +160,12 @@ public class FileDirectory {
         return true;
     }
 
+    public Boolean copyAll(String source, String destination, JDCopyOption... options) throws FileUtilException {
+        return copyAll(Paths.get(source), Paths.get(destination), options);
+    }
 
     public Boolean copyAll(String source, String destination) throws FileUtilException {
-        return copyAll(Paths.get(source), Paths.get(destination));
+        return copyAll(source, destination);
     }
 
 
@@ -179,11 +184,16 @@ public class FileDirectory {
         return true;
     }
 
+
     public Boolean move(String source, String destination) throws FileUtilException {
+        return move(source, destination, JDCopyOption.REPLACE_EXISTING);
+    }
+
+    public Boolean move(String source, String destination, CopyOption... options) throws FileUtilException {
         Path sourceFile = Paths.get(source);
         Path targetFile = Paths.get(destination);
         try {
-            Files.move(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(sourceFile, targetFile, options);
             return true;
         } catch (IOException ex) {
             throw new FileUtilException(ex.getMessage());
