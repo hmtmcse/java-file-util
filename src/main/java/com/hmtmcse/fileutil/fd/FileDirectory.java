@@ -193,11 +193,10 @@ public class FileDirectory {
         Path sourceFile = Paths.get(source);
         Path targetFile = Paths.get(destination);
         try {
-            System.out.println(Files.move(sourceFile, targetFile, StandardCopyOption.ATOMIC_MOVE).toAbsolutePath());
+            Files.move(sourceFile, targetFile, options);
             return true;
         } catch (IOException ex) {
             ex.printStackTrace();
-            System.out.println("ex: " + ex.getMessage());
             throw new FileUtilException(ex.getMessage());
         }
     }
