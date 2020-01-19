@@ -1,5 +1,6 @@
 package com.hmtmcse.fileutil
 
+import com.hmtmcse.fileutil.data.FDListingFilter
 import com.hmtmcse.fileutil.data.FileDirectoryListing
 import com.hmtmcse.fileutil.fd.FileDirectory
 import spock.lang.Specification
@@ -30,6 +31,14 @@ class FileDirectoryTest extends Specification{
         expect: "Recursively List Directory"
         FileDirectory fileDirectory = new FileDirectory()
         List<FileDirectoryListing>  list = fileDirectory.listDirRecursively("J:\\text-xyz\\test")
+        println(list);
+    }
+
+    def "Recursively List Dir With filter Test"(){
+        expect: "Directory List with filter"
+        FileDirectory fileDirectory = new FileDirectory()
+        FDListingFilter fdListingFilter = new FDListingFilter().directoryOnly().notRecursive()
+        List<FileDirectoryListing>  list = fileDirectory.listDirRecursively("J:\\text-xyz\\test", fdListingFilter)
         println(list);
     }
 

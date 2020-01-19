@@ -1,10 +1,11 @@
 package com.hmtmcse.fileutil.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileDirectoryListing {
     public FDInfo fileDirectoryInfo;
-    public List<FileDirectoryListing> subDirectories;
+    public List<FileDirectoryListing> subDirectories = new ArrayList<>();
 
     public FileDirectoryListing setFileDirectoryInfo(FDInfo fileDirectoryInfo) {
         this.fileDirectoryInfo = fileDirectoryInfo;

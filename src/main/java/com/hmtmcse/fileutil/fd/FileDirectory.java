@@ -2,6 +2,7 @@ package com.hmtmcse.fileutil.fd;
 
 import com.hmtmcse.fileutil.common.FileUtilException;
 import com.hmtmcse.fileutil.data.FDInfo;
+import com.hmtmcse.fileutil.data.FDListingFilter;
 import com.hmtmcse.fileutil.data.FileDirectoryListing;
 
 import javax.swing.*;
@@ -294,14 +295,21 @@ public class FileDirectory {
     }
 
     public List<FileDirectoryListing> listDirRecursively(String location) {
+        return listDirRecursively(location, new FDListingFilter());
+    }
+
+    public List<FileDirectoryListing> listDirRecursively(String location, FDListingFilter filter) {
         File file = new File(location);
         List<FileDirectoryListing> fileDirectoryListings = new ArrayList<>();
         FileDirectoryListing fileDirectoryListing;
         try {
             for (File fileLData : file.listFiles()) {
+                if (filter.isDirectoryOnly && !fileLData.isDirectory()) {
+                    continue;
+                }
                 fileDirectoryListing = FileDirectoryListing.addInfo(getDetailsInfo(fileLData.getAbsolutePath(), false));
-                if (fileLData.isDirectory()) {
-                    fileDirectoryListing.subDirectories = listDirRecursively(fileLData.getAbsolutePath());
+                if (fileLData.isDirectory() && filter.isRecursive) {
+                    fileDirectoryListing.subDirectories = listDirRecursively(fileLData.getAbsolutePath(), filter);
                 }
                 fileDirectoryListings.add(fileDirectoryListing);
             }
