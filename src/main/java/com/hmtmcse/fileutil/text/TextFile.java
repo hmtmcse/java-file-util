@@ -1,16 +1,13 @@
 package com.hmtmcse.fileutil.text;
 
 import com.hmtmcse.fileutil.common.FileUtilException;
-import com.hmtmcse.fileutil.data.OpenOption;
 import com.hmtmcse.fileutil.data.TextFileData;
 import com.hmtmcse.fileutil.fd.FileDirectory;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -59,18 +56,18 @@ public class TextFile {
 
 
     public Boolean stringToFile(String location, String content) throws FileUtilException {
-        return stringToFile(location, content, OpenOption.CREATE);
+        return stringToFile(location, content, StandardOpenOption.CREATE);
     }
 
     public Boolean stringToFileAppendText(String location, String content) throws FileUtilException {
-        return stringToFile(location, content, OpenOption.APPEND);
+        return stringToFile(location, content, StandardOpenOption.APPEND);
     }
 
     public Boolean stringToCreateNewFile(String location, String content) throws FileUtilException {
-        return stringToFile(location, content, OpenOption.CREATE_NEW);
+        return stringToFile(location, content, StandardOpenOption.CREATE_NEW);
     }
 
-    public Boolean stringToFile(String location, String content, OpenOption... options) throws FileUtilException {
+    public Boolean stringToFile(String location, String content, StandardOpenOption... options) throws FileUtilException {
         try {
             Path path = Paths.get(location);
             BufferedWriter writer = Files.newBufferedWriter(path, Charset.forName("UTF-8"), options);
