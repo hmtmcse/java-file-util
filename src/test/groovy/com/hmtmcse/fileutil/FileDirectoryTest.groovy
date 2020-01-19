@@ -1,5 +1,6 @@
 package com.hmtmcse.fileutil
 
+import com.hmtmcse.fileutil.data.FileDirectoryListing
 import com.hmtmcse.fileutil.fd.FileDirectory
 import spock.lang.Specification
 
@@ -23,6 +24,13 @@ class FileDirectoryTest extends Specification{
         expect: "Copy Directory"
         FileDirectory fileDirectory = new FileDirectory()
         fileDirectory.copyAll("C:\\Users\\touhid\\Desktop\\temp\\copy", "C:\\Users\\touhid\\Desktop\\temp\\bismillah\\copyTo")
+    }
+
+    def "Recursively List Dir Test"(){
+        expect: "Recursively List Directory"
+        FileDirectory fileDirectory = new FileDirectory()
+        List<FileDirectoryListing>  list = fileDirectory.listDirRecursively("J:\\text-xyz\\test")
+        println(list);
     }
 
 }

@@ -4,6 +4,7 @@ import com.hmtmcse.fileutil.common.FileUtilException;
 import com.hmtmcse.fileutil.data.FDInfo;
 import com.hmtmcse.fileutil.data.FileDirectoryListing;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
@@ -298,15 +299,14 @@ public class FileDirectory {
         FileDirectoryListing fileDirectoryListing;
         try {
             for (File fileLData : file.listFiles()) {
-                if (fileLData.isFile()) {
-                    fileDirectoryListings.add((FileDirectoryListing) getDetailsInfo(fileLData.getAbsolutePath(), false));
-                } else if (fileLData.isDirectory()) {
-                    fileDirectoryListing = (FileDirectoryListing) getDetailsInfo(fileLData.getAbsolutePath(), false);
+                fileDirectoryListing = FileDirectoryListing.addInfo(getDetailsInfo(fileLData.getAbsolutePath(), false));
+                if (fileLData.isDirectory()) {
                     fileDirectoryListing.subDirectories = listDirRecursively(fileLData.getAbsolutePath());
-                    fileDirectoryListings.add(fileDirectoryListing);
                 }
+                fileDirectoryListings.add(fileDirectoryListing);
             }
         } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
         return fileDirectoryListings;
     }
