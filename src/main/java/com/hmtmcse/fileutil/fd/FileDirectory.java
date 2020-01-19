@@ -2,18 +2,20 @@ package com.hmtmcse.fileutil.fd;
 
 import com.hmtmcse.fileutil.common.FileUtilException;
 import com.hmtmcse.fileutil.data.FDInfo;
-import com.hmtmcse.fileutil.data.JDCopyOption;
+import com.hmtmcse.fileutil.data.FileDirectoryListing;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 
 public class FileDirectory {
 
@@ -288,6 +290,25 @@ public class FileDirectory {
     public File getFile(String location) throws FileUtilException {
         throwIfNull(location, "Path Should not be null");
         return new File(location);
+    }
+
+    public List<FileDirectoryListing> listDirRecursively(String location) {
+        File file = new File(location);
+        List<FileDirectoryListing> fileDirectoryListings = new ArrayList<>();
+        FileDirectoryListing fileDirectoryListing;
+        try {
+            for (File fileLData : file.listFiles()) {
+                if (fileLData.isFile()) {
+                    fileDirectoryListings.add((FileDirectoryListing) getDetailsInfo(fileLData.getAbsolutePath(), false));
+                } else if (fileLData.isDirectory()) {
+                    fileDirectoryListing = (FileDirectoryListing) getDetailsInfo(fileLData.getAbsolutePath(), false);
+                    fileDirectoryListing.subDirectories = listDirRecursively(fileLData.getAbsolutePath());
+                    fileDirectoryListings.add(fileDirectoryListing);
+                }
+            }
+        } catch (Exception e) {
+        }
+        return fileDirectoryListings;
     }
 
 }
