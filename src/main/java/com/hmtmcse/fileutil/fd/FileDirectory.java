@@ -319,4 +319,8 @@ public class FileDirectory {
         return fileDirectoryListings;
     }
 
+    public static FileDirectory instance(){
+        return new FileDirectory();
+    }
+
 }
