@@ -205,6 +205,20 @@ public class FileDirectory {
         }
     }
 
+    public Boolean removeIfExist(String path) throws FileUtilException {
+        if (isExist(path)){
+            return remove(path);
+        }
+        return true;
+    }
+
+    public Boolean removeAllIfExist(String path) throws FileUtilException {
+        if (isExist(path)){
+            return removeAll(path);
+        }
+        return true;
+    }
+
     public Boolean remove(String path) throws FileUtilException {
         Path sourceFile = Paths.get(path);
         try {
