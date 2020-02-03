@@ -80,11 +80,22 @@ public class TextFile {
         }
     }
 
-    public Boolean findReplaceAndPlace(String templatePath, String placeToPath, LinkedHashMap<String, String> findReplace) throws FileUtilException {
+    public Boolean findReplaceAndPlaceWithRegex(String templatePath, String placeToPath, LinkedHashMap<String, String> findReplace) throws FileUtilException {
         String content = fileToString(templatePath).getText();
         if (content != null && !content.equals("")) {
             for (Map.Entry<String, String> entry : findReplace.entrySet()) {
                 content = content.replaceAll(entry.getKey(), entry.getValue());
+            }
+            stringToFile(placeToPath, content);
+        }
+        return true;
+    }
+
+    public Boolean findReplaceAndPlace(String templatePath, String placeToPath, LinkedHashMap<String, String> findReplace) throws FileUtilException {
+        String content = fileToString(templatePath).getText();
+        if (content != null && !content.equals("")) {
+            for (Map.Entry<String, String> entry : findReplace.entrySet()) {
+                content = content.replace(entry.getKey(), entry.getValue());
             }
             stringToFile(placeToPath, content);
         }
