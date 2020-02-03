@@ -26,7 +26,9 @@ public class TextFile {
                 throw new FileUtilException("File not exist.");
             }
             BufferedReader reader = Files.newBufferedReader(path, Charset.forName("UTF-8"));
-            return readFromBufferedReaderToString(reader, true);
+            TextFileData textFileData = readFromBufferedReaderToString(reader, true);
+            reader.close();
+            return textFileData;
         } catch (IOException e) {
             throw new FileUtilException(e.getMessage());
         }
