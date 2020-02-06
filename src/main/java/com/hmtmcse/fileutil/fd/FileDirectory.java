@@ -169,7 +169,7 @@ public class FileDirectory {
     }
 
     public Boolean copyAll(String source, String destination) throws FileUtilException {
-        return copyAll(source, destination);
+        return copyAll(source, destination, COPY_ATTRIBUTES);
     }
 
 
