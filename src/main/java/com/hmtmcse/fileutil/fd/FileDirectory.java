@@ -321,7 +321,7 @@ public class FileDirectory {
                 if (filter.isDirectoryOnly && !fileLData.isDirectory()) {
                     continue;
                 }
-                fileDirectoryListing = FileDirectoryListing.addInfo(getDetailsInfo(fileLData.getAbsolutePath(), false));
+                fileDirectoryListing = FileDirectoryListing.addInfo(getDetailsInfo(fileLData.getAbsolutePath(), filter.isDetails));
                 if (fileLData.isDirectory() && filter.isRecursive) {
                     fileDirectoryListing.subDirectories = listDirRecursively(fileLData.getAbsolutePath(), filter);
                 }
