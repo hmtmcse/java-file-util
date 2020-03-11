@@ -8,6 +8,7 @@ import com.hmtmcse.fileutil.data.FileDirectoryListing;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.util.ArrayList;
@@ -333,8 +334,23 @@ public class FileDirectory {
         return fileDirectoryListings;
     }
 
+    public InputStream getInputStreamFromFile(String location) throws FileUtilException {
+        if (!isExist(location)) {
+            throwException("Invalid File");
+        }
+        Path sourceFile = Paths.get(location);
+        try {
+            return Files.newInputStream(sourceFile);
+        } catch (IOException e) {
+            throwException(e.getMessage());
+        }
+        return null;
+    }
+
     public static FileDirectory instance(){
         return new FileDirectory();
     }
+
+
 
 }
