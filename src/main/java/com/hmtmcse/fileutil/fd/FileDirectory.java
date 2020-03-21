@@ -5,7 +5,6 @@ import com.hmtmcse.fileutil.data.FDInfo;
 import com.hmtmcse.fileutil.data.FDListingFilter;
 import com.hmtmcse.fileutil.data.FileDirectoryListing;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -104,6 +103,11 @@ public class FileDirectory {
     public Boolean isExist(String path) {
         Path sourceFile = Paths.get(path);
         return this.isExist(sourceFile);
+    }
+
+    public Boolean isDirectory(String path) {
+        Path sourceFile = Paths.get(path);
+        return Files.isDirectory(sourceFile);
     }
 
 
