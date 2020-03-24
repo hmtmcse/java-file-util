@@ -8,4 +8,8 @@ public class FDUtil {
         return Paths.get(start, end).toAbsolutePath().toString();
     }
 
+    public static String concatPathToURI(String start, String end){
+        return Paths.get(start, end).toAbsolutePath().toUri().toString();
+    }
+
 }
