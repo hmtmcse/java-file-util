@@ -2,7 +2,9 @@ package com.hmtmcse.fileutil.text;
 
 import com.hmtmcse.fileutil.common.FileUtilException;
 import com.hmtmcse.fileutil.data.TextFileData;
+import com.hmtmcse.fileutil.fd.FDUtil;
 import com.hmtmcse.fileutil.fd.FileDirectory;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -56,6 +58,12 @@ public class TextFile {
         return textFileData;
     }
 
+    public Boolean stringToFile(String location, String fileName, String content) throws FileUtilException {
+        if (!fileDirectory.isExist(location)) {
+            fileDirectory.createDirectories(location);
+        }
+        return stringToFile(FDUtil.concatPath(location, fileName), content);
+    }
 
     public Boolean stringToFile(String location, String content) throws FileUtilException {
         return stringToFile(location, content, StandardOpenOption.CREATE);
@@ -84,10 +92,25 @@ public class TextFile {
 
     public String findReplaceAndPlaceFromFile(String filePath, LinkedHashMap<String, String> findReplace) throws FileUtilException {
         String content = fileToString(filePath).getText();
+        return findReplaceInText(content, findReplace);
+    }
+
+    public String findReplaceInText(String content, LinkedHashMap<String, String> findReplace) {
         if (content != null && !content.equals("")) {
             for (Map.Entry<String, String> entry : findReplace.entrySet()) {
                 if (entry.getKey() != null && entry.getValue() != null) {
                     content = content.replaceAll(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        return content;
+    }
+
+    public String findOnlyReplaceInText(String content, LinkedHashMap<String, String> findReplace) {
+        if (content != null && !content.equals("")) {
+            for (Map.Entry<String, String> entry : findReplace.entrySet()) {
+                if (entry.getKey() != null && entry.getValue() != null) {
+                    content = content.replace(entry.getKey(), entry.getValue());
                 }
             }
         }
