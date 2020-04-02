@@ -270,6 +270,12 @@ public class FileDirectory {
         }
     }
 
+    public Boolean createDirectoriesIfNotExist(String path) throws FileUtilException {
+        if (!isExist(path)) {
+            return createDirectories(path);
+        }
+        return true;
+    }
 
     public Boolean createDirectories(String path) throws FileUtilException {
         Path sourceFile = Paths.get(path);
