@@ -217,6 +217,11 @@ public class FileDirectory {
         return true;
     }
 
+    public Boolean createParentDir(String pathWithFileName) throws FileUtilException {
+        Path sourceFile = Paths.get(pathWithFileName);
+        return createDirectoriesIfNotExist(sourceFile.getParent().toString());
+    }
+
     public Boolean removeAllIfExist(String path) throws FileUtilException {
         if (isExist(path)){
             return removeAll(path);
