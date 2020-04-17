@@ -105,6 +105,11 @@ public class FileDirectory {
         return this.isExist(sourceFile);
     }
 
+    public String getParentPath(String path) {
+        Path sourceFile = Paths.get(path);
+        return sourceFile.getParent().toAbsolutePath().toString();
+    }
+
     public Boolean isDirectory(String path) {
         Path sourceFile = Paths.get(path);
         return Files.isDirectory(sourceFile);
