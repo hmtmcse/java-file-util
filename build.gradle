@@ -41,12 +41,24 @@ if (isPublish) {
     }
 
     publishing {
+
+        repositories {
+            maven {
+                credentials {
+                    username = (project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : "hmtmcse" )
+                    password = (project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : "123" )
+                }
+                url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            }
+        }
+
         publications {
             mavenJava(MavenPublication) {
                 artifactId = 'fileutil-file-util'
                 groupId = 'com.hmtmcse.fileutil'
                 from components.java
                 artifact sourcesJar
+                artifact javadocJar
                 versionMapping {
                     usage('fileutil-api') {
                         fromResolutionOf('runtimeClasspath')
