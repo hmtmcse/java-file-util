@@ -54,7 +54,7 @@ if (isPublish) {
 
         publications {
             mavenJava(MavenPublication) {
-                artifactId = 'fileutil-file-util'
+                artifactId = 'java-file-util'
                 groupId = 'com.hmtmcse.fileutil'
                 from components.java
                 artifact sourcesJar
