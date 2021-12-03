@@ -6,7 +6,6 @@ version '1.0.0'
 repositories {
     mavenCentral()
     jcenter()
-    maven { url "https://dl.bintray.com/hmtmcse/maven/" }
     maven { url "http://central.maven.org/maven2/" }
 }
 
